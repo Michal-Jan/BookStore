@@ -177,12 +177,13 @@ namespace BookStore_API.Controllers
                     _logger.LogWarn("Bad request was submitted.");
                     return BadRequest();
                 }
-                var author = await _authorRepository.FindById(id);
-                if (author == null)
+                var isExists = await _authorRepository.isExists(id);
+                if (!isExists)
                 {
                     _logger.LogWarn($"Author with id {id} was not found.");
                     return NotFound();
                 }
+                var author = await _authorRepository.FindById(id);
                 var isSucesss = await _authorRepository.Delete(author);
                 if (!isSucesss)
                 {
