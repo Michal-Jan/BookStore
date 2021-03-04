@@ -33,10 +33,51 @@ namespace BookStore_API.Controllers
         }
 
         /// <summary>
+        /// Register endpoint
+        /// </summary>
+        /// <param name="userDTO"></param>
+        /// <returns></returns>
+        [Route("register")]
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] UserDTO userDTO)
+        {
+            var location = GetControllerActionNames();
+
+            try
+            {
+                var username = userDTO.EmailAddress;
+                var password = userDTO.Password;
+
+                _logger.LogInfo($"{location}: Attempted to register user: {username}");
+
+                var user = new IdentityUser { Email = username, UserName = username };
+                var result = await _userManager.CreateAsync(user, password);
+
+                if (!result.Succeeded)
+                {
+                    foreach(var error in result.Errors)
+                    {
+                        _logger.LogError($"{location}: {error.Code} {error.Description}");
+                    }
+                    return InternalError($"{location}: Failed to register {username}");
+                }
+                _logger.LogInfo($"{location}: Success: {username} registered");
+                return Ok(new { result.Succeeded });
+
+            }
+            catch(Exception e)
+            {
+                return InternalError($"{location}: {e.Message}");
+            }
+        }
+
+        /// <summary>
         /// Login endpoint
         /// </summary>
         /// <param name="userDTO"></param>
         /// <returns></returns>
+        [Route("login")]
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserDTO userDTO)
@@ -44,7 +85,7 @@ namespace BookStore_API.Controllers
             var location = GetControllerActionNames();
             try
             {
-                var username = userDTO.UserName;
+                var username = userDTO.EmailAddress;
                 var password = userDTO.Password;
 
                 _logger.LogInfo($"{location}: Login attempted: {username}");
