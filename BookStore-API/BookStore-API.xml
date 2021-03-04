@@ -37,6 +37,13 @@
             <param name="author"></param>
             <returns></returns>
         </member>
+        <member name="M:BookStore_API.Controllers.AuthorsController.Delete(System.Int32)">
+            <summary>
+            Deletes an Author
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:BookStore_API.Controllers.BooksController">
             <summary>
             Interacts with the Books Table
@@ -93,6 +100,13 @@
             Gets a value
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BookStore_API.Controllers.UsersController.Login(BookStore_API.DTOs.UserDTO)">
+            <summary>
+            Login endpoint
+            </summary>
+            <param name="userDTO"></param>
             <returns></returns>
         </member>
     </members>
