@@ -1,5 +1,5 @@
 ﻿@page "/authors/delete/{Id}"
-
+@attribute [Authorize(Roles = "Administrator")]
 @inject IAuthorRepository _authorRepository
 @inject NavigationManager _navigationManager
 

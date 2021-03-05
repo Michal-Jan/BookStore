@@ -1,5 +1,5 @@
 ﻿@page "/authors/"
-
+@attribute [Authorize]
 @inject IAuthorRepository _authorRepository
 @inject NavigationManager _navigationManager
 
@@ -26,16 +26,20 @@ else
                     <td>@author.Firstname</td>
                     <td>@author.Lastname</td>
                     <td>
-                        <a href="/authors/view/@author.Id" class="btn btn-primary"><span class="oi oi-book"></span> View</a>
-                        <a href="/authors/edit/@author.Id" class="btn btn-warning"><span class="oi oi-pencil"></span> Edit</a>
-                        <a href="/authors/delete/@author.Id" class="btn btn-danger"><span class="oi oi-delete"></span> Delete</a>
+                        <a href="/authors/view/@author.Id" class="btn btn-primary btn-sm"><span class="oi oi-book"></span> View</a>
+                        <AuthorizeView Roles="Administrator">
+                            <a href="/authors/edit/@author.Id" class="btn btn-warning btn-sm"><span class="oi oi-pencil"></span> Edit</a>
+                            <a href="/authors/delete/@author.Id" class="btn btn-danger btn-sm"><span class="oi oi-delete"></span> Delete</a>
+                        </AuthorizeView>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 }
-<a href="/authors/create" class="btn btn-success m-2"><span class="oi oi-plus" aria-hidden="true"></span> Add new Author</a>
+<AuthorizeView Roles="Administrator">
+    <a href="/authors/create" class="btn btn-success m-2"><span class="oi oi-plus" aria-hidden="true"></span> Add new Author</a>
+</AuthorizeView>
 
 @code {
     private IList<Author> Model;
