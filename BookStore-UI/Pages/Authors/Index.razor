@@ -1,0 +1,47 @@
+﻿@page "/authors/"
+
+@inject IAuthorRepository _authorRepository
+@inject NavigationManager _navigationManager
+
+<h3>Authors</h3>
+
+@if (Model == null)
+{
+    <div class="alert alert-dismissible alert-secondary">Loading...</div>
+}
+else
+{
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var author in Model)
+            {
+                <tr>
+                    <td>@author.Firstname</td>
+                    <td>@author.Lastname</td>
+                    <td>
+                        <button class="btn btn-primary"><span class="oi oi-book"></span> View</button>
+                        <button class="btn btn-warning"><span class="oi oi-pencil"></span> Edit</button>
+                        <button class="btn btn-danger"><span class="oi oi-delete"></span> Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IList<Author> Model;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Model = await _authorRepository.Get(Endpoints.AuthorsEndpoint);
+
+    }
+}

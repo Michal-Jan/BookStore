@@ -1,6 +1,5 @@
 using Blazored.LocalStorage;
 using BookStore_UI.Contracts;
-using BookStore_UI.Data;
 using BookStore_UI.Providers;
 using BookStore_UI.Service;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +39,7 @@ namespace BookStore_UI
             services.AddScoped<AuthenticationStateProvider>(p => p.GetRequiredService<ApiAuthenticationStateProvider>());
             services.AddScoped<JwtSecurityTokenHandler>();
             services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
+            services.AddTransient<IAuthorRepository, AuthorRespository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
