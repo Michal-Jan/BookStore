@@ -1,0 +1,67 @@
+﻿@page "/authors/view/{Id}"
+
+@inject IAuthorRepository _authorRepository
+@inject NavigationManager _navigationManager
+
+@if (Model == null)
+{
+    <div class="alert alert-dismissible alert-secondary">Loading...</div>
+}
+else
+{
+<div class="col-md-4">
+    <h4>Author details</h4>
+    <table class="table table-responsive">
+        <tr>
+            <td class="font-weight-bold">First name</td>
+            <td>@Model.Firstname</td>
+        </tr>
+        <tr>
+            <td class="font-weight-bold">Last name</td>
+            <td>@Model.Lastname</td>
+        </tr>
+        <tr>
+            <td class="font-weight-bold">Bio</td>
+            <td>@Model.Bio</td>
+        </tr>
+    </table>
+    <br />
+    @if (Model.Books == null || Model.Books.Count < 1)
+    {
+        <div class="alert alert-dismissible alert-secondary">No books from this author.</div>
+    }
+    else
+    {
+        <div class="card" style="width: 18rem;">
+            <div class="card-header">Author's books</div>
+            <ul class="list-group list-group-flush">
+                @foreach (var book in Model.Books)
+                {
+                    <li class="list-group-item"><a href="/books/view/@book.Id">@book.Title</a></li>
+                }
+            </ul>
+        </div>
+    }
+
+</div>
+}
+<br />
+<button class="btn btn-info" @onclick="BackToList"><span class="oi oi-arrow-circle-left"></span> Back to list of authors</button>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Author Model = new Author();
+
+    protected override async Task OnInitializedAsync()
+    {
+        int id = int.Parse(Id);
+        Model = await _authorRepository.Get(Endpoints.AuthorsEndpoint, id);
+    }
+
+    private void BackToList()
+    {
+        _navigationManager.NavigateTo("/authors/");
+    }
+}

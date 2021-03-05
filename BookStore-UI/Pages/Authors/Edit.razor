@@ -1,0 +1,70 @@
+﻿@page "/authors/edit/{Id}"
+
+@inject IAuthorRepository _authorRepository
+@inject NavigationManager _navigationManager
+
+<h3>Edit Author</h3>
+
+@if (isFailed)
+{
+    <div class="alert alert-danger"><p>Something went wrong with editing author...</p></div>
+}
+@if (Model == null)
+{
+    <div class="alert alert-dismissible alert-secondary">Loading...</div>
+}
+else
+{
+    <EditForm Model="Model" OnValidSubmit="EditAuthor">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label for="firstname">First name</label>
+            <InputText @bind-Value="Model.Firstname" class="form-control" id="firstname" />
+        </div>
+        <div class="form-group">
+            <label for="lastname">Last name</label>
+            <InputText @bind-Value="Model.Lastname" class="form-control" id="lastname" />
+        </div>
+        <div class="form-group">
+            <label for="bio">Bio</label>
+            <InputTextArea @bind-Value="Model.Bio" class="form-control" id="bio" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </EditForm>
+}
+<br />
+<button class="btn btn-info" @onclick="BackToList"><span class="oi oi-arrow-circle-left"></span> Back to list of authors</button>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Author Model = new Author();
+
+    bool isFailed = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        int id = int.Parse(Id);
+        Model = await _authorRepository.Get(Endpoints.AuthorsEndpoint, id);
+    }
+
+    private async Task EditAuthor()
+    {
+        bool isSuccess = await _authorRepository.Update(Endpoints.AuthorsEndpoint, Model, Model.Id);
+        if (isSuccess)
+        {
+            BackToList();
+        }
+        else
+        {
+            isFailed = true;
+        }
+    }
+
+    private void BackToList()
+    {
+        _navigationManager.NavigateTo("/authors/");
+    }
+}

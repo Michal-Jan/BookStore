@@ -26,9 +26,9 @@ else
                     <td>@author.Firstname</td>
                     <td>@author.Lastname</td>
                     <td>
-                        <button class="btn btn-primary"><span class="oi oi-book"></span> View</button>
-                        <button class="btn btn-warning"><span class="oi oi-pencil"></span> Edit</button>
-                        <button class="btn btn-danger"><span class="oi oi-delete"></span> Delete</button>
+                        <a href="/authors/view/@author.Id" class="btn btn-primary"><span class="oi oi-book"></span> View</a>
+                        <a href="/authors/edit/@author.Id" class="btn btn-warning"><span class="oi oi-pencil"></span> Edit</a>
+                        <a href="/authors/delete/@author.Id" class="btn btn-danger"><span class="oi oi-delete"></span> Delete</a>
                     </td>
                 </tr>
             }
