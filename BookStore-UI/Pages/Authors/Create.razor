@@ -1,0 +1,56 @@
+﻿@page "/authors/create/"
+
+@inject IAuthorRepository _authorRepository
+@inject NavigationManager _navigationManager
+
+<h4>Create an Author</h4>
+
+@if (isFailed)
+{
+    <div class="alert alert-danger"><p>Something went wrong with creating author...</p></div>
+}
+
+<EditForm Model="Model" OnValidSubmit="CreateAuthor">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="firstname">First name</label>
+        <InputText @bind-Value="Model.Firstname" class="form-control" id="firstname" />
+    </div>
+    <div class="form-group">
+        <label for="lastname">Last name</label>
+        <InputText @bind-Value="Model.Lastname" class="form-control" id="lastname" />
+    </div>
+    <div class="form-group">
+        <label for="bio">Bio</label>
+        <InputTextArea @bind-Value="Model.Bio" class="form-control" id="bio" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add author</button>
+</EditForm>
+<br />
+<button class="btn btn-info" @onclick="BackToList"><span class="oi oi-arrow-circle-left"></span> Back to list of authors</button>
+
+@code {
+
+    private Author Model = new Author();
+
+    bool isFailed = false;
+
+    private async Task CreateAuthor()
+    {
+        bool isSuccess = await _authorRepository.Create(Endpoints.AuthorsEndpoint, Model);
+        if (isSuccess)
+        {
+            BackToList();
+        }
+        else
+        {
+            isFailed = true;
+        }
+    }
+
+    private void BackToList()
+    {
+        _navigationManager.NavigateTo("/authors/");
+    }
+}
